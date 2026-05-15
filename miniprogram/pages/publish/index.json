@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "写评价",
+  "usingComponents": {
+    "star-rating": "../../components/star-rating/index",
+    "tag-selector": "../../components/tag-selector/index"
+  }
+}

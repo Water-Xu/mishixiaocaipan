@@ -1,0 +1,10 @@
+<view class="personality-card" bindtap="share">
+  <view class="card-bg">
+    <text class="big-emoji">{{personality === 'spicy_lover' ? '🌶️' : personality === 'budget_hunter' ? '💰' : personality === 'mine_sweeper' ? '💣' : personality === 'five_star_forever' ? '⭐' : personality === 'food_detective' ? '🔍' : personality === 'laid_back' ? '😌' : personality === 'adventurer' ? '🗺️' : personality === 'regular' ? '👴' : '🕵️'}}</text>
+    <view class="card-text">
+      <text class="personality-title">{{personality === 'spicy_lover' ? '无辣不欢型' : personality === 'budget_hunter' ? '性价比猎人' : personality === 'mine_sweeper' ? '专业踩雷选手' : personality === 'five_star_forever' ? '什么都好吃' : personality === 'food_detective' ? '吃货侦探' : personality === 'laid_back' ? '佛系选手' : personality === 'adventurer' ? '尝鲜达人' : personality === 'regular' ? '老饕' : '神秘食客'}}</text>
+      <text class="nickname-text">@{{nickName}}</text>
+    </view>
+    <view class="share-hint">点击分享</view>
+  </view>
+</view>

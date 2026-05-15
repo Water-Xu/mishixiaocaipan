@@ -1,0 +1,96 @@
+<view class="page-container ranking-page">
+  <view class="ranking-header">
+    <text class="header-title">{{month}} 战报</text>
+    <text class="header-sub">看看这个月谁坐了最多牢</text>
+    <view class="share-btn" bindtap="shareRanking">📤 分享到群</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-state">
+    <text>统计中…</text>
+  </view>
+
+  <view wx:elif="{{ranking}}" class="ranking-content fade-in">
+    <!-- 踩雷 TOP3 -->
+    <view class="rank-section">
+      <view class="rank-section-header">
+        <text class="rank-emoji">💣</text>
+        <text class="rank-title">本月踩雷 TOP 3</text>
+        <text class="rank-sub">避开它们你就赢了</text>
+      </view>
+      <view wx:if="{{ranking.badTop && ranking.badTop.length}}" class="rank-list">
+        <view
+          wx:for="{{ranking.badTop}}"
+          wx:key="_id"
+          class="rank-item rank-bad"
+        >
+          <text class="rank-num bad-num">{{index + 1}}</text>
+          <view class="rank-info">
+            <text class="rank-name">{{item.merchantName}}</text>
+            <text class="rank-quote">「{{item.topBadQuote || '无语了'}}」</text>
+          </view>
+          <text class="rank-count">{{item.badCount}} 差评</text>
+        </view>
+      </view>
+      <view wx:else class="rank-empty"><text>这个月还没有踩雷，继续保持！</text></view>
+    </view>
+
+    <!-- 神仙外卖 TOP5 -->
+    <view class="rank-section">
+      <view class="rank-section-header">
+        <text class="rank-emoji">✨</text>
+        <text class="rank-title">本月神仙外卖 TOP 5</text>
+        <text class="rank-sub">放心点，闭眼冲</text>
+      </view>
+      <view wx:if="{{ranking.goodTop && ranking.goodTop.length}}" class="rank-list">
+        <view
+          wx:for="{{ranking.goodTop}}"
+          wx:key="_id"
+          class="rank-item rank-good"
+        >
+          <text class="rank-num good-num">{{index + 1}}</text>
+          <view class="rank-info">
+            <text class="rank-name">{{item.merchantName}}</text>
+            <text class="rank-quote">「{{item.topGoodQuote || '超好吃！'}}」</text>
+          </view>
+          <view class="avg-score">
+            <text class="score-val">{{item.avgScore}}</text>
+            <text class="score-star">★</text>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="rank-empty"><text>大家评价不多，多写几条吧</text></view>
+    </view>
+
+    <!-- 最敬业评论员 -->
+    <view class="rank-section">
+      <view class="rank-section-header">
+        <text class="rank-emoji">🏆</text>
+        <text class="rank-title">最敬业评论员</text>
+      </view>
+      <view wx:if="{{ranking.topReviewer}}" class="reviewer-card">
+        <image class="reviewer-avatar" src="{{ranking.topReviewer.avatarUrl || ''}}" mode="aspectFill" />
+        <view class="reviewer-info">
+          <text class="reviewer-name">{{ranking.topReviewer.nickName}}</text>
+          <text class="reviewer-desc">写了 {{ranking.topReviewer.count}} 条评价，感谢贡献</text>
+        </view>
+        <text class="reviewer-badge">🥇</text>
+      </view>
+    </view>
+
+    <!-- 本月数据 -->
+    <view class="stats-section">
+      <view class="stat-item">
+        <text class="stat-num">{{ranking.totalReviews || 0}}</text>
+        <text class="stat-label">条评价</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{ranking.totalMerchants || 0}}</text>
+        <text class="stat-label">家店被评过</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">¥{{ranking.avgSpend || '--'}}</text>
+        <text class="stat-label">人均花费</text>
+      </view>
+    </view>
+  </view>
+</view>

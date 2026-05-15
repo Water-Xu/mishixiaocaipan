@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "觅食小裁判",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "review-card": "../../components/review-card/index"
+  }
+}

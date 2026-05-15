@@ -1,0 +1,91 @@
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 56rpx 32rpx 20rpx;
+  background: #FFFFFF;
+}
+.header-title {
+  font-size: 44rpx;
+  font-weight: 800;
+  color: #1C1008;
+  display: block;
+}
+.header-sub {
+  font-size: 24rpx;
+  color: #BDB0A0;
+  display: block;
+  margin-top: 4rpx;
+}
+.action-btn {
+  background: #FFF0ED;
+  color: #F54B2A;
+  font-size: 26rpx;
+  font-weight: 600;
+  padding: 12rpx 24rpx;
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+.action-btn:active { opacity: 0.7; }
+
+.sort-bar {
+  display: flex;
+  gap: 0;
+  padding: 16rpx 32rpx;
+  background: #FFFFFF;
+  border-bottom: 1rpx solid #F0E5DC;
+  margin-bottom: 16rpx;
+}
+.sort-item {
+  flex: 1;
+  text-align: center;
+  font-size: 28rpx;
+  color: #9E9185;
+  padding: 12rpx 0;
+  border-radius: 8rpx;
+  transition: all 0.15s ease;
+  font-weight: 500;
+}
+.sort-active {
+  color: #F54B2A;
+  font-weight: 700;
+  background: #FFF0ED;
+}
+
+.list-wrap { padding: 0 32rpx; }
+.reviews { display: flex; flex-direction: column; gap: 20rpx; }
+
+/* 骨架屏 */
+.skeleton-list { display: flex; flex-direction: column; gap: 20rpx; }
+.skeleton-card { display: flex; gap: 20rpx; background: #FFFFFF; border-radius: 16rpx; padding: 28rpx; }
+.skeleton-avatar { width: 72rpx; height: 72rpx; border-radius: 50%; flex-shrink: 0; }
+.skeleton-content { flex: 1; display: flex; flex-direction: column; gap: 12rpx; justify-content: center; }
+.skeleton-line { height: 24rpx; border-radius: 12rpx; }
+
+/* 加载更多 */
+.loading-more, .no-more {
+  text-align: center;
+  padding: 40rpx;
+  font-size: 24rpx;
+  color: #BDB0A0;
+}
+
+/* FAB */
+.fab {
+  position: fixed;
+  right: 40rpx;
+  bottom: calc(140rpx + env(safe-area-inset-bottom));
+  background: #F54B2A;
+  border-radius: 48rpx;
+  padding: 20rpx 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  box-shadow: 0 8rpx 32rpx rgba(245, 75, 42, 0.45);
+  transition: transform 0.15s ease;
+}
+.fab:active { transform: scale(0.93); }
+.fab-icon { font-size: 32rpx; }
+.fab-text { font-size: 28rpx; color: #FFFFFF; font-weight: 600; }

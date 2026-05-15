@@ -1,0 +1,139 @@
+<view class="page-container import-page">
+  <!-- Step 0：选图 -->
+  <view wx:if="{{step === 0}}" class="step0 fade-in">
+    <view class="step0-hero">
+      <text class="hero-emoji">📱</text>
+      <text class="hero-title">截图上传，10 秒搞定</text>
+      <text class="hero-sub">把美团订单截图发过来，系统自动识别店名和菜品</text>
+    </view>
+    <view class="upload-area" bindtap="chooseImage">
+      <view wx:if="{{uploading || recognizing}}" class="uploading-state">
+        <text class="uploading-icon">⏳</text>
+        <text class="uploading-text">{{recognizing ? '识别中，稍等…' : '上传中…'}}</text>
+      </view>
+      <view wx:else class="upload-placeholder">
+        <text class="upload-icon">📷</text>
+        <text class="upload-text">点这里选截图</text>
+        <text class="upload-sub">支持相册或直接拍照</text>
+      </view>
+    </view>
+    
+    <view class="manual-link" bindtap="goManual">
+      <text>也可以手动搜商家 →</text>
+    </view>
+    <!-- 示例说明 -->
+    <view class="example-section">
+      <view class="example-header">
+        <text class="example-title">截哪个页面？像这样</text>
+        <text class="example-badge">示例</text>
+      </view>
+      <view class="example-img-wrap">
+        <image
+          class="example-img"
+          src="/images/eg.jpg"
+          mode="widthFix"
+          bindtap="previewExample"
+        />
+        <view class="example-annotations">
+          <view class="annotation annotation-merchant">
+            <view class="annotation-dot"></view>
+            <text class="annotation-text">商家名会从这里识别</text>
+          </view>
+          <view class="annotation annotation-items">
+            <view class="annotation-dot"></view>
+            <text class="annotation-text">菜品 + 价格自动提取</text>
+          </view>
+          <view class="annotation annotation-total">
+            <view class="annotation-dot"></view>
+            <text class="annotation-text">合计金额自动填入</text>
+          </view>
+        </view>
+      </view>
+      <text class="example-tip">💡 在美团 App 打开"订单详情"页截个图就行，不用裁剪</text>
+    </view>
+
+  </view>
+
+  <!-- Step 1：确认识别结果 -->
+  <view wx:if="{{step === 1}}" class="step1 fade-in">
+    <!-- 截图缩略图 + 识别状态 -->
+    <view class="result-preview">
+      <image class="screenshot-thumb" src="{{result.tempPath}}" mode="aspectFit" />
+      <view class="confidence-badge {{result.confidence === 'high' ? 'badge-good' : 'badge-warn'}}">
+        {{result.confidence === 'high' ? '✓ 识别成功' : '⚠️ 部分识别，请检查'}}
+      </view>
+    </view>
+
+    <view class="confirm-section">
+      <view class="confirm-title-row">
+        <text class="confirm-title">确认一下信息</text>
+        <text class="confirm-hint">识别错了可以直接改</text>
+      </view>
+
+      <!-- 商家名 -->
+      <view class="field-item">
+        <view class="field-label-row">
+          <text class="field-icon">🏪</text>
+          <text class="field-label">店名</text>
+          <text wx:if="{{result.merchantName}}" class="field-status-ok">已识别</text>
+          <text wx:else class="field-status-miss">未识别</text>
+        </view>
+        <input
+          class="field-input {{!result.merchantName ? 'field-input-empty' : ''}}"
+          value="{{result.merchantName}}"
+          placeholder="识别不到就自己填店名"
+          bindinput="inputMerchantName"
+        />
+      </view>
+
+      <!-- 合计金额 -->
+      <view class="field-item">
+        <view class="field-label-row">
+          <text class="field-icon">💰</text>
+          <text class="field-label">合计金额</text>
+          <text wx:if="{{result.totalAmount}}" class="field-status-ok">已识别</text>
+          <text wx:else class="field-status-miss">未识别</text>
+        </view>
+        <view class="amount-input-wrap">
+          <text class="amount-prefix">¥</text>
+          <input
+            class="field-input amount-input"
+            type="digit"
+            value="{{result.totalAmount}}"
+            placeholder="填实付金额"
+            bindinput="inputAmount"
+          />
+        </view>
+      </view>
+
+      <!-- 识别出的菜品 -->
+      <view class="field-item">
+        <view class="field-label-row">
+          <text class="field-icon">🍱</text>
+          <text class="field-label">识别到的菜品</text>
+          <text class="field-count">{{result.items ? result.items.length : 0}} 道</text>
+        </view>
+        <view wx:if="{{result.items && result.items.length}}" class="items-detail-list">
+          <view
+            wx:for="{{result.items}}"
+            wx:key="name"
+            class="item-detail-row"
+          >
+            <text class="item-name">{{item.name}}</text>
+            <text class="item-price">¥{{item.price}}</text>
+          </view>
+        </view>
+        <view wx:else class="items-empty">
+          <text>没识别到菜品，不影响提交，写评价时再说</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="action-row">
+      <view class="btn-secondary" bindtap="retake">重新截图</view>
+      <view class="btn btn-primary confirm-btn" bindtap="confirm">
+        {{confirmed ? '保存中…' : '没问题，写评价 →'}}
+      </view>
+    </view>
+  </view>
+</view>

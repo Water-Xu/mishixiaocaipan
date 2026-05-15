@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "img-with-status": "../img-with-status/index"
+  }
+}

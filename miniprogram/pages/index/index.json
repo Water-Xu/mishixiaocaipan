@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "今天吃啥",
+  "usingComponents": {
+    "dice-roller": "../../components/dice-roller/index"
+  }
+}

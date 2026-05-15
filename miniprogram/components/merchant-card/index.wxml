@@ -1,0 +1,17 @@
+<view class="merchant-card" bindtap="tapCard">
+  <image class="cover" src="{{merchant.coverImage || ''}}" mode="aspectFill" />
+  <view class="info">
+    <view class="name-row">
+      <text class="name">{{merchant.name}}</text>
+      <view wx:if="{{merchant.isBlacklisted}}" class="blacklist-badge">🚫 已拉黑</view>
+    </view>
+    <view class="meta-row">
+      <view class="score-row">
+        <text class="score-num">{{merchant.avgScore || '--'}}</text>
+        <text class="score-star">★</text>
+        <text class="review-count">{{merchant.reviewCount || 0}} 条评价</text>
+      </view>
+      <view class="category-tag">{{merchant.category || '未分类'}}</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,80 @@
+.map-page { position: relative; width: 100%; height: 100vh; }
+.map { width: 100%; height: 100%; }
+
+.legend {
+  position: absolute;
+  top: 120rpx;
+  right: 24rpx;
+  background: rgba(255,255,255,0.95);
+  border-radius: 16rpx;
+  padding: 16rpx 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  box-shadow: 0 4rpx 20rpx rgba(28,16,8,0.12);
+}
+.legend-item { display: flex; align-items: center; gap: 10rpx; }
+.legend-icon { font-size: 28rpx; }
+.legend-label, .legend-dot-label { font-size: 22rpx; color: #7A6858; }
+.legend-dot-label { color: #BDB0A0; }
+
+.popover-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(28,16,8,0.2);
+  z-index: 100;
+}
+.popover {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 32rpx;
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+  z-index: 101;
+  box-shadow: 0 -8rpx 32rpx rgba(28,16,8,0.12);
+}
+.popover-header { display: flex; align-items: flex-start; gap: 16rpx; margin-bottom: 20rpx; }
+.popover-info { flex: 1; }
+.popover-name { font-size: 34rpx; font-weight: 700; color: #1C1008; display: block; margin-bottom: 8rpx; }
+.popover-score { display: flex; align-items: center; gap: 6rpx; }
+.score-star { color: #FFB836; font-size: 28rpx; }
+.score-num { font-size: 30rpx; font-weight: 700; color: #FFB836; }
+.score-count { font-size: 22rpx; color: #BDB0A0; }
+.popover-close {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #F5F0EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: #7A6858;
+  flex-shrink: 0;
+}
+.popover-close:active { background: #EDE5DC; }
+
+.popover-status {
+  padding: 16rpx 24rpx;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+}
+.status-good { background: #EDF7F1; color: #4CAF7D; }
+.status-bad { background: #FFF0ED; color: #F54B2A; }
+.status-mid { background: #F5F0EB; color: #7A6858; }
+
+.popover-action {
+  background: #FFF0ED;
+  color: #F54B2A;
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  text-align: center;
+}
+.popover-action:active { background: #FFE4DE; }

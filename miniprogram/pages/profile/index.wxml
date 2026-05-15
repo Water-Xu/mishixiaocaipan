@@ -1,0 +1,121 @@
+<view class="page-container profile-page">
+  <!-- 用户信息 -->
+  <view class="user-header">
+    <image wx:if="{{userInfo.avatarUrl}}" class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+    <view wx:else class="user-avatar user-avatar-default"><text class="user-avatar-emoji">😋</text></view>
+    <view class="user-info">
+      <text class="user-name">{{userInfo.nickName || '食客'}}</text>
+      <text class="user-sub">觅食中…</text>
+    </view>
+    <view class="ranking-btn" bindtap="goRanking">
+      <text>🏆 战报</text>
+    </view>
+  </view>
+
+  <!-- 人格卡片 -->
+  <view class="section-gap">
+    <personality-card
+      personality="{{userInfo.personality || ''}}"
+      nickName="{{userInfo.nickName || '食客'}}"
+    />
+  </view>
+
+  <!-- 口味偏好 -->
+  <view class="pref-section">
+    <view class="pref-header">
+      <text class="section-title">我的口味</text>
+      <view class="edit-btn" bindtap="toggleEditPref">
+        <text>{{editingPref ? '取消' : '改一改'}}</text>
+      </view>
+    </view>
+
+    <!-- 只读展示 -->
+    <view wx:if="{{!editingPref}}" class="pref-display">
+      <view class="pref-item">
+        <text class="pref-label">辣度</text>
+        <text class="pref-val">{{displaySpicy}}</text>
+      </view>
+      <view class="pref-item">
+        <text class="pref-label">忌口</text>
+        <text class="pref-val">{{displayForbidden}}</text>
+      </view>
+      <view class="pref-item">
+        <text class="pref-label">偏好</text>
+        <text class="pref-val">{{displayCategory}}</text>
+      </view>
+      <view class="pref-item">
+        <text class="pref-label">预算</text>
+        <text class="pref-val">{{displayBudget}}</text>
+      </view>
+    </view>
+
+    <!-- 编辑模式 -->
+    <view wx:elif="{{editingPref}}" class="pref-edit fade-in">
+      <text class="edit-group-label">辣度</text>
+      <view class="options-row">
+        <view wx:for="{{spicyOptions}}" wx:key="value"
+          class="opt-chip {{preference && preference.spicy === item.value ? 'opt-active' : ''}}"
+          hover-class="opt-chip-hover" hover-stay-time="100"
+          data-value="{{item.value}}" bindtap="selectSpicy">
+          {{item.emoji}} {{item.label}}
+        </view>
+      </view>
+      <text class="edit-group-label">忌口</text>
+      <view class="options-row">
+        <view wx:for="{{forbiddenOptions}}" wx:key="value"
+          class="opt-chip {{forbiddenSet[item.value] ? 'opt-active' : ''}}"
+          hover-class="opt-chip-hover" hover-stay-time="100"
+          data-value="{{item.value}}" bindtap="toggleForbidden">
+          {{item.emoji}} {{item.label}}
+        </view>
+      </view>
+      <text class="edit-group-label">品类</text>
+      <view class="options-row">
+        <view wx:for="{{categoryOptions}}" wx:key="value"
+          class="opt-chip {{categorySet[item.value] ? 'opt-active' : ''}}"
+          hover-class="opt-chip-hover" hover-stay-time="100"
+          data-value="{{item.value}}" bindtap="toggleCategory">
+          {{item.emoji}} {{item.label}}
+        </view>
+      </view>
+      <text class="edit-group-label">预算</text>
+      <view class="options-row">
+        <view wx:for="{{budgetOptions}}" wx:key="value"
+          class="opt-chip {{preference && preference.budget === item.value ? 'opt-active' : ''}}"
+          hover-class="opt-chip-hover" hover-stay-time="100"
+          data-value="{{item.value}}" bindtap="selectBudget">
+          {{item.emoji}} {{item.label}}
+        </view>
+      </view>
+      <button class="save-pref-btn btn btn-primary" bindtap="savePref">保存</button>
+    </view>
+  </view>
+
+  <!-- 我的评价 -->
+  <view class="my-reviews-section">
+    <text class="section-title">我写过的评价</text>
+    <view wx:if="{{loading}}" class="loading-placeholder"><text>加载中…</text></view>
+    <view wx:elif="{{reviews.length}}" class="my-reviews-list">
+      <view
+        wx:for="{{reviews}}"
+        wx:key="_id"
+        class="my-review-item"
+        data-id="{{item.merchantId}}"
+        bindtap="goReview"
+      >
+        <view class="review-left">
+          <text class="review-merchant">{{item.merchantName || '未知商家'}}</text>
+          <text class="review-preview">{{item.contentShort}}</text>
+        </view>
+        <view class="review-right">
+          <text class="review-score">{{item.score}}★</text>
+          <text class="review-time">{{item.createdAt}}</text>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty-state">
+      <text class="empty-icon">📝</text>
+      <text class="empty-text">还没写过评价\n去广场写第一条？</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,44 @@
+{
+  "pages": [
+    "pages/square/index",
+    "pages/index/index",
+    "pages/profile/index",
+    "pages/onboarding/index",
+    "pages/import/index",
+    "pages/publish/index",
+    "pages/map/index",
+    "pages/merchant-detail/index",
+    "pages/ranking/index"
+  ],
+  "tabBar": {
+    "custom": true,
+    "color": "#9E9185",
+    "selectedColor": "#F54B2A",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/square/index",
+        "text": "广场"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "text": "今天吃啥"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "觅食小裁判",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#FFF8F3"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

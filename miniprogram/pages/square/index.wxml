@@ -1,0 +1,73 @@
+<view class="page-container">
+  <!-- 顶部标题区 -->
+  <view class="header">
+    <view class="header-left">
+      <text class="header-title">同事都在说</text>
+      <text class="header-sub">{{filterLabel}}</text>
+    </view>
+    <view class="header-actions">
+      <view class="action-btn" bindtap="goImport">
+        <text>📷 导入订单</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 排序筛选 -->
+  <view class="sort-bar">
+    <view
+      wx:for="{{[{key:'latest',label:'最新'},{key:'hot',label:'最热'},{key:'bad',label:'差评'}]}}"
+      wx:key="key"
+      class="sort-item {{sortBy === item.key ? 'sort-active' : ''}}"
+      data-sort="{{item.key}}"
+      bindtap="switchSort"
+    >
+      {{item.label}}
+    </view>
+  </view>
+
+  <!-- 列表 -->
+  <view class="list-wrap">
+    <!-- 骨架屏 -->
+    <view wx:if="{{loading}}" class="skeleton-list">
+      <view wx:for="{{[1,2,3]}}" wx:key="*this" class="skeleton-card">
+        <view class="skeleton skeleton-avatar"></view>
+        <view class="skeleton-content">
+          <view class="skeleton skeleton-line" style="width:40%"></view>
+          <view class="skeleton skeleton-line" style="width:80%"></view>
+          <view class="skeleton skeleton-line" style="width:60%"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 评价列表 -->
+    <view wx:elif="{{reviews.length}}" class="reviews">
+      <review-card
+        wx:for="{{reviews}}"
+        wx:key="_id"
+        review="{{item}}"
+        showMerchant="{{true}}"
+        style="animation-delay: {{index * 0.05}}s"
+      />
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:else class="empty-state">
+      <text class="empty-icon">🍽️</text>
+      <text class="empty-text">还没有人写评价\n第一个吃螃蟹？</text>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{loadingMore}}" class="loading-more">
+      <text>捞更多…</text>
+    </view>
+    <view wx:elif="{{noMore && reviews.length}}" class="no-more">
+      <text>— 到底了，就这些 —</text>
+    </view>
+  </view>
+
+  <!-- 发布按钮 -->
+  <view class="fab" bindtap="goPublish">
+    <text class="fab-icon">✏️</text>
+    <text class="fab-text">写评价</text>
+  </view>
+</view>

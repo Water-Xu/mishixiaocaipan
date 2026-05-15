@@ -1,0 +1,57 @@
+<view class="review-card">
+  <!-- 头部：用户信息 + 时间 -->
+  <view class="card-header">
+    <image wx:if="{{review.userAvatarUrl}}" class="avatar" src="{{review.userAvatarUrl}}" mode="aspectFill" />
+    <view wx:else class="avatar avatar-default"><text class="avatar-default-emoji">😋</text></view>
+    <view class="header-info">
+      <text class="nickname">{{review.userNickName || '匿名食客'}}</text>
+      <text wx:if="{{review.isSecondReview}}" class="second-badge">🔁 二刷</text>
+      <text class="time">{{review.createdAt}}</text>
+    </view>
+    <view class="score-badge score-{{review.score >= 4 ? 'good' : (review.score <= 2 ? 'bad' : 'mid')}}">
+      <text class="score-num">{{review.score}}</text>
+      <text class="score-star">★</text>
+    </view>
+  </view>
+
+  <!-- 商家名（可选展示） -->
+  <view wx:if="{{showMerchant && review.merchantName}}" class="merchant-link" bindtap="tapMerchant">
+    <text class="merchant-icon">🏪</text>
+    <text class="merchant-name">{{review.merchantName}}</text>
+    <text class="merchant-arrow">›</text>
+  </view>
+
+  <!-- 评价文字 -->
+  <view class="content-wrap" bindtap="tapExpand">
+    <text class="content">{{expanded ? review.content : review.contentShort}}</text>
+    <text wx:if="{{review.contentShort !== review.content}}" class="expand-btn">
+      {{expanded ? ' 收起' : ' 展开'}}
+    </text>
+  </view>
+
+  <!-- 图片 -->
+  <view wx:if="{{review.images && review.images.length}}" class="images-wrap">
+    <img-with-status
+      wx:for="{{review.images}}"
+      wx:key="fileID"
+      fileID="{{item.fileID}}"
+      status="{{item.imgStatus}}"
+      width="160rpx"
+      height="160rpx"
+      data-index="{{index}}"
+      bindtap="previewImage"
+    />
+  </view>
+
+  <!-- 标签 -->
+  <view wx:if="{{review.tags && review.tags.length}}" class="tags-wrap">
+    <view
+      wx:for="{{review.tags}}"
+      wx:key="*this"
+      class="review-tag {{item === '踩雷' || item === '难吃到哭' ? 'tag-bad' : 'tag-good'}}"
+    >{{item}}</view>
+  </view>
+
+  <!-- 心情 -->
+  <view wx:if="{{review.mood}}" class="mood-text">💬 {{review.mood}}</view>
+</view>

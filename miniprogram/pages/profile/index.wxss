@@ -1,0 +1,88 @@
+.profile-page { padding: 0 32rpx 240rpx; }
+
+.user-header {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 56rpx 0 32rpx;
+}
+.user-avatar { width: 96rpx; height: 96rpx; border-radius: 50%; background: #F5F0EB; flex-shrink: 0; }
+.user-avatar-default { display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #FFE0D5, #FFD0C0); }
+.user-avatar-emoji { font-size: 56rpx; line-height: 1; }
+.user-info { flex: 1; }
+.user-name { font-size: 36rpx; font-weight: 700; color: #1C1008; display: block; margin-bottom: 4rpx; }
+.user-sub { font-size: 24rpx; color: #BDB0A0; }
+.ranking-btn {
+  padding: 12rpx 24rpx;
+  background: #FFF8EE;
+  color: #FF8C42;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+}
+.ranking-btn:active { opacity: 0.7; }
+
+.section-gap { margin-bottom: 24rpx; }
+
+/* 偏好 */
+.pref-section {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  box-shadow: 0 2rpx 16rpx rgba(28,16,8,0.07);
+  margin-bottom: 24rpx;
+}
+.pref-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20rpx; }
+.section-title { font-size: 30rpx; font-weight: 700; color: #1C1008; }
+.edit-btn { font-size: 26rpx; color: #F54B2A; font-weight: 600; }
+.edit-btn:active { opacity: 0.7; }
+
+.pref-display { display: flex; flex-direction: column; gap: 16rpx; }
+.pref-item { display: flex; align-items: center; gap: 16rpx; }
+.pref-label { font-size: 24rpx; color: #9E9185; width: 60rpx; flex-shrink: 0; }
+.pref-val { font-size: 26rpx; color: #1C1008; }
+
+.pref-edit { display: flex; flex-direction: column; gap: 16rpx; }
+.edit-group-label { font-size: 24rpx; color: #9E9185; margin-top: 8rpx; }
+.options-row { display: flex; flex-wrap: wrap; }
+.opt-chip {
+  padding: 8rpx 20rpx;
+  background: #F5F0EB;
+  color: #7A6858;
+  border-radius: 40rpx;
+  font-size: 24rpx;
+  border: 2rpx solid transparent;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  margin-right: 12rpx;
+  margin-bottom: 12rpx;
+}
+.opt-chip-hover { transform: scale(0.95); opacity: 0.85; }
+.opt-active { background: #FFF0ED; color: #F54B2A; border-color: #F54B2A; font-weight: 600; }
+.save-pref-btn { margin-top: 16rpx; height: 80rpx; font-size: 28rpx; }
+
+/* 我的评价 */
+.my-reviews-section {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  box-shadow: 0 2rpx 16rpx rgba(28,16,8,0.07);
+}
+.my-reviews-section .section-title { display: block; margin-bottom: 20rpx; }
+.my-reviews-list { display: flex; flex-direction: column; gap: 0; }
+.my-review-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #F5F0EB;
+}
+.my-review-item:last-child { border-bottom: none; }
+.my-review-item:active { background: #FFF8F3; border-radius: 8rpx; }
+.review-left { flex: 1; }
+.review-merchant { font-size: 26rpx; font-weight: 600; color: #1C1008; display: block; margin-bottom: 4rpx; }
+.review-preview { font-size: 24rpx; color: #9E9185; line-height: 1.5; }
+.review-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4rpx; flex-shrink: 0; }
+.review-score { font-size: 26rpx; font-weight: 700; color: #FFB836; }
+.review-time { font-size: 22rpx; color: #BDB0A0; }
+
+.loading-placeholder { text-align: center; padding: 40rpx; color: #BDB0A0; font-size: 26rpx; }

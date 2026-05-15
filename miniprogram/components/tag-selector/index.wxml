@@ -1,0 +1,13 @@
+<view class="tag-wrap">
+  <view
+    wx:for="{{tags}}"
+    wx:key="value"
+    class="tag-item {{_selectedSet[item.value] ? 'tag-active' : ''}}"
+    hover-class="tag-item-hover"
+    hover-stay-time="100"
+    data-value="{{item.value}}"
+    bindtap="toggle"
+  >
+    <text>{{item.label}}</text>
+  </view>
+</view>

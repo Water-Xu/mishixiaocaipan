@@ -1,0 +1,71 @@
+<view class="page-container">
+  <!-- 骨架 -->
+  <view wx:if="{{loading}}" class="skeleton-header">
+    <view class="skeleton skeleton-cover"></view>
+    <view class="skeleton-info">
+      <view class="skeleton skeleton-title"></view>
+      <view class="skeleton skeleton-sub"></view>
+    </view>
+  </view>
+
+  <!-- 商家头部 -->
+  <view wx:elif="{{merchant}}" class="merchant-header">
+    <image
+      wx:if="{{merchant.coverImage}}"
+      class="header-cover"
+      src="{{merchant.coverImage}}"
+      mode="aspectFill"
+    />
+    <view wx:else class="header-cover-placeholder">🏪</view>
+
+    <view class="header-info">
+      <view class="name-row">
+        <text class="merchant-name">{{merchant.name}}</text>
+        <view wx:if="{{merchant.isBlacklisted}}" class="blacklist-tag">🚫 已被拉黑</view>
+      </view>
+      <view class="score-row">
+        <text class="big-score">{{merchant.avgScore || '--'}}</text>
+        <text class="score-label">综合评分</text>
+        <view class="review-count-badge">
+          <text>{{merchant.reviewCount || 0}} 条评价</text>
+        </view>
+      </view>
+      <view class="sub-row">
+        <text class="category-label">{{merchant.category || '未分类'}}</text>
+        <text wx:if="{{merchant.address}}" class="address-text">📍 {{merchant.address}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-bar">
+    <view class="action-item" bindtap="goPublish">
+      <text class="action-icon">✏️</text>
+      <text class="action-label">写评价</text>
+    </view>
+    <view class="action-item" bindtap="voteBlacklist">
+      <text class="action-icon">🚫</text>
+      <text class="action-label">投票拉黑</text>
+    </view>
+  </view>
+
+  <!-- 评价列表 -->
+  <view class="reviews-section">
+    <text class="reviews-title">同事怎么说</text>
+    <view wx:if="{{reviews.length}}" class="reviews-list">
+      <review-card
+        wx:for="{{reviews}}"
+        wx:key="_id"
+        review="{{item}}"
+        showMerchant="{{false}}"
+      />
+    </view>
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <text class="empty-icon">🤫</text>
+      <text class="empty-text">还没人来这家评价\n要不要第一个说两句？</text>
+    </view>
+
+    <view wx:if="{{loadingMore}}" class="loading-more"><text>加载中…</text></view>
+    <view wx:elif="{{noMore && reviews.length}}" class="no-more"><text>— 到底了 —</text></view>
+  </view>
+</view>

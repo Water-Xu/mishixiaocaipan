@@ -1,0 +1,82 @@
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 112rpx;
+  background: #FFFFFF;
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: constant(safe-area-inset-bottom);
+  z-index: 999;
+}
+
+.tab-bar-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1rpx;
+  background: #F0E5DC;
+}
+
+.tab-bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  transition: all 0.2s ease;
+}
+
+.tab-bar-item:active {
+  opacity: 0.7;
+}
+
+.tab-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64rpx;
+  height: 64rpx;
+}
+
+.tab-icon-center {
+  width: 88rpx;
+  height: 88rpx;
+  background: #F54B2A;
+  border-radius: 50%;
+  margin-top: -32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(245, 75, 42, 0.45);
+  transition: transform 0.15s ease;
+}
+
+.tab-bar-item.active .tab-icon-center {
+  transform: scale(1.08);
+}
+
+.tab-emoji {
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+.tab-icon-center .tab-emoji {
+  font-size: 44rpx;
+  color: #FFFFFF;
+  /* emoji color can't be overridden but the bg shows the active state */
+}
+
+.tab-text {
+  font-size: 20rpx;
+  color: #9E9185;
+  font-weight: 400;
+  transition: color 0.2s ease;
+  margin-top: 2rpx;
+}
+
+.tab-bar-item.active .tab-text {
+  color: #F54B2A;
+  font-weight: 600;
+}

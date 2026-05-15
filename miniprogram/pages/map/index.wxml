@@ -1,0 +1,39 @@
+<view class="map-page">
+  <map
+    class="map"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    markers="{{markers}}"
+    show-location
+    bindmarkertap="tapMarker"
+  />
+
+  <!-- 图例 -->
+  <view class="legend">
+    <view class="legend-item"><text class="legend-icon">😊</text><text class="legend-label">好评多</text></view>
+    <view class="legend-item"><text class="legend-icon">💣</text><text class="legend-label">踩雷</text></view>
+    <view class="legend-item"><text class="legend-icon">•</text><text class="legend-dot-label">没评价</text></view>
+  </view>
+
+  <!-- 商家弹窗 -->
+  <view wx:if="{{showPopover}}" class="popover-mask" bindtap="closePopover"></view>
+  <view wx:if="{{showPopover}}" class="popover slide-up">
+    <view class="popover-header">
+      <view class="popover-info">
+        <text class="popover-name">{{selectedMerchant.name}}</text>
+        <view class="popover-score">
+          <text class="score-star">★</text>
+          <text class="score-num">{{selectedMerchant.avgScore || '--'}}</text>
+          <text class="score-count">{{selectedMerchant.reviewCount || 0}} 条评价</text>
+        </view>
+      </view>
+      <view class="popover-close" bindtap="closePopover">×</view>
+    </view>
+    <view class="popover-status {{selectedMerchant.avgScore >= 4 ? 'status-good' : selectedMerchant.avgScore <= 2 ? 'status-bad' : 'status-mid'}}">
+      {{selectedMerchant.avgScore >= 4 ? '😊 口碑不错，可以冲' : selectedMerchant.avgScore <= 2 ? '💣 雷区，谨慎点餐' : '一般，看心情'}}
+    </view>
+    <view class="popover-action" bindtap="goDetail">
+      <text>查看全部评价 →</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,16 @@
+<view class="img-wrap" style="width:{{width}};height:{{height}};">
+  <image
+    wx:if="{{status !== 'rejected'}}"
+    class="img {{status === 'pending' ? 'img-pending' : ''}}"
+    src="{{fileID}}"
+    mode="aspectFill"
+    lazy-load
+  />
+  <view wx:if="{{status === 'pending'}}" class="overlay">
+    <text class="overlay-text">审核中</text>
+  </view>
+  <view wx:if="{{status === 'rejected'}}" class="rejected-placeholder">
+    <text class="rejected-icon">🚫</text>
+    <text class="rejected-text">图片已移除</text>
+  </view>
+</view>

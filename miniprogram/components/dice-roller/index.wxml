@@ -1,0 +1,6 @@
+<view class="dice-wrap {{animClass}}" bindtap="tap">
+  <text class="dice-face">{{face}}</text>
+  <view class="dice-hint">
+    <text class="dice-hint-text">{{rolling ? '算命中…' : '点我 or 摇手机'}}</text>
+  </view>
+</view>

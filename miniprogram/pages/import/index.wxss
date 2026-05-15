@@ -1,0 +1,252 @@
+.import-page { padding: 0 32rpx 160rpx; }
+
+/* Step 0 */
+.step0 { padding-top: 80rpx; display: flex; flex-direction: column; align-items: center; gap: 40rpx; }
+.step0-hero { text-align: center; }
+.hero-emoji { font-size: 100rpx; display: block; margin-bottom: 20rpx; }
+.hero-title { font-size: 40rpx; font-weight: 700; color: #1C1008; display: block; margin-bottom: 16rpx; }
+.hero-sub { font-size: 28rpx; color: #7A6858; line-height: 1.7; }
+
+.upload-area {
+  width: 100%;
+  height: 320rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  border: 3rpx dashed #D4C5B8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.upload-area:active { background: #FFF0ED; border-color: #F54B2A; }
+.upload-placeholder, .uploading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+}
+.upload-icon, .uploading-icon { font-size: 72rpx; }
+.upload-text { font-size: 32rpx; font-weight: 600; color: #1C1008; }
+.upload-sub { font-size: 24rpx; color: #BDB0A0; }
+.uploading-text { font-size: 28rpx; color: #7A6858; }
+
+.manual-link {
+  font-size: 26rpx;
+  color: #9E9185;
+  text-decoration: underline;
+}
+.manual-link:active { opacity: 0.7; }
+
+/* 示例区 */
+.example-section {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 16rpx rgba(28,16,8,0.07);
+}
+.example-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+.example-title { font-size: 26rpx; font-weight: 600; color: #1C1008; }
+.example-badge {
+  font-size: 20rpx;
+  color: #FF8C42;
+  background: #FFF3E8;
+  padding: 2rpx 12rpx;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+.example-img-wrap { position: relative; margin-bottom: 16rpx; }
+.example-img {
+  width: 100%;
+  border-radius: 12rpx;
+  display: block;
+  border: 1rpx solid #F0E5DC;
+}
+
+/* 标注气泡（左侧浮层标注） */
+.example-annotations {
+  position: absolute;
+  top: 0;
+  right: -8rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  pointer-events: none;
+}
+.annotation {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: rgba(245,75,42,0.9);
+  border-radius: 0 8rpx 8rpx 0;
+  padding: 6rpx 16rpx 6rpx 10rpx;
+}
+.annotation-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: #FFFFFF;
+  flex-shrink: 0;
+}
+.annotation-text { font-size: 20rpx; color: #FFFFFF; white-space: nowrap; }
+
+/* 各标注对应的位置 */
+.annotation-merchant { margin-top: 500rpx; }
+.annotation-items { margin-top: 40rpx; }
+.annotation-total { margin-top: 650rpx; }
+
+.example-tip {
+  font-size: 24rpx;
+  color: #9E9185;
+  line-height: 1.6;
+  display: block;
+}
+
+/* Step 1 */
+.step1 { padding-top: 32rpx; }
+.result-preview {
+  position: relative;
+  margin-bottom: 32rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  background: #F5F0EB;
+}
+.screenshot-thumb {
+  width: 100%;
+  height: 320rpx;
+  display: block;
+}
+.confidence-badge {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+.badge-good { background: #EDF7F1; color: #4CAF7D; }
+.badge-warn { background: #FFF8EE; color: #FF8C42; }
+
+.confirm-section { background: #FFFFFF; border-radius: 16rpx; padding: 28rpx; margin-bottom: 28rpx; }
+.confirm-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1C1008;
+  display: block;
+  margin-bottom: 24rpx;
+}
+.field-item { margin-bottom: 20rpx; }
+.field-label { font-size: 24rpx; color: #9E9185; display: block; margin-bottom: 8rpx; }
+.field-input {
+  width: 100%;
+  height: 80rpx;
+  background: #FFF8F3;
+  border-radius: 10rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: #1C1008;
+  border: 2rpx solid #F0E5DC;
+}
+.items-section { margin-top: 20rpx; }
+.items-list { display: flex; flex-wrap: wrap; gap: 12rpx; margin-top: 12rpx; }
+.item-chip {
+  background: #FFF8F3;
+  border-radius: 8rpx;
+  padding: 6rpx 16rpx;
+  font-size: 24rpx;
+  color: #7A6858;
+}
+
+/* Step1 确认区样式升级 */
+.confirm-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+.confirm-hint { font-size: 22rpx; color: #BDB0A0; }
+
+.field-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-bottom: 10rpx;
+}
+.field-icon { font-size: 26rpx; }
+.field-status-ok {
+  margin-left: auto;
+  font-size: 20rpx;
+  color: #4CAF7D;
+  background: #EDF7F1;
+  padding: 2rpx 12rpx;
+  border-radius: 20rpx;
+  font-weight: 600;
+}
+.field-status-miss {
+  margin-left: auto;
+  font-size: 20rpx;
+  color: #FF8C42;
+  background: #FFF3E8;
+  padding: 2rpx 12rpx;
+  border-radius: 20rpx;
+}
+.field-count {
+  margin-left: auto;
+  font-size: 20rpx;
+  color: #BDB0A0;
+}
+
+.field-input-empty { border-color: #FF8C42 !important; }
+
+.amount-input-wrap {
+  display: flex;
+  align-items: center;
+  background: #FFF8F3;
+  border-radius: 10rpx;
+  border: 2rpx solid #F0E5DC;
+  padding: 0 20rpx;
+  height: 80rpx;
+}
+.amount-prefix { font-size: 28rpx; font-weight: 700; color: #F54B2A; margin-right: 8rpx; }
+.amount-input { flex: 1; height: 80rpx; font-size: 32rpx; font-weight: 700; color: #1C1008; border: none; background: transparent; padding: 0; }
+
+/* 菜品详情列表 */
+.items-detail-list {
+  background: #FFF8F3;
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+.item-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14rpx 20rpx;
+  border-bottom: 1rpx solid #F0E5DC;
+}
+.item-detail-row:last-child { border-bottom: none; }
+.item-name { font-size: 26rpx; color: #1C1008; flex: 1; margin-right: 16rpx; }
+.item-price { font-size: 26rpx; font-weight: 600; color: #F54B2A; flex-shrink: 0; }
+.items-empty { font-size: 24rpx; color: #BDB0A0; padding: 16rpx 0; }
+
+.action-row { display: flex; gap: 20rpx; }
+.btn-secondary {
+  flex: 1;
+  height: 96rpx;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F5F0EB;
+  color: #7A6858;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+.btn-secondary:active { background: #EDE5DC; }
+.confirm-btn { flex: 2; height: 96rpx; font-size: 28rpx; }

@@ -1,0 +1,229 @@
+<view class="page">
+  <!-- ══ Step 0：身份绑定 ══ -->
+  <view wx:if="{{step === 0}}" class="step step-0 fade-in">
+    <view class="hero">
+      <text class="logo-emoji">🍜</text>
+      <text class="app-name">觅食小裁判</text>
+      <text class="app-slogan">你来裁判，他来参考\n让办公室外卖不再踩雷</text>
+    </view>
+
+    <view class="identity-section">
+      <text class="section-title">先认识一下你</text>
+
+      <!-- 头像选择 -->
+      <view class="avatar-wrap">
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <view wx:if="{{avatarUrl}}" class="avatar-img-wrap">
+            <image class="avatar-img" src="{{avatarUrl}}" mode="aspectFill" />
+            <view class="avatar-edit-badge">✏️</view>
+          </view>
+          <view wx:else class="avatar-placeholder">
+            <text class="avatar-placeholder-icon">😋</text>
+            <text class="avatar-placeholder-tip">点击选择头像</text>
+          </view>
+        </button>
+      </view>
+
+      <!-- 昵称输入 -->
+      <view class="nickname-wrap {{identityError ? 'input-error' : ''}}">
+        <input
+          class="nickname-input"
+          type="nickname"
+          placeholder="输入你的昵称"
+          value="{{nickName}}"
+          bindinput="onNickNameInput"
+          maxlength="16"
+          confirmType="done"
+        />
+      </view>
+      <text wx:if="{{identityError}}" class="error-text">⚠️ {{identityError}}</text>
+    </view>
+
+    <button
+      class="btn btn-primary action-btn {{identityLoading ? 'btn-loading' : ''}}"
+      bindtap="confirmIdentity"
+      disabled="{{identityLoading}}"
+    >
+      {{identityLoading ? '登录中…' : '确认，继续'}}
+    </button>
+  </view>
+
+  <!-- ══ Step 1：加入或创建群组 ══ -->
+  <view wx:if="{{step === 1}}" class="step step-1 fade-in">
+    <view class="step-header">
+      <text class="step-title">加入你的觅食团</text>
+      <text class="step-sub">和同事一起避坑，一起发现好吃的</text>
+    </view>
+
+    <!-- 模式选择卡片 -->
+    <view class="mode-cards">
+      <view
+        class="mode-card {{groupMode === 'join' ? 'mode-card-active' : ''}}"
+        data-mode="join"
+        bindtap="selectGroupMode"
+      >
+        <text class="mode-emoji">🔑</text>
+        <text class="mode-title">加入已有群组</text>
+        <text class="mode-desc">向同事索取邀请码</text>
+      </view>
+      <view
+        class="mode-card {{groupMode === 'create' ? 'mode-card-active' : ''}}"
+        data-mode="create"
+        bindtap="selectGroupMode"
+      >
+        <text class="mode-emoji">✨</text>
+        <text class="mode-title">创建新群组</text>
+        <text class="mode-desc">我来建，拉同事进来</text>
+      </view>
+    </view>
+
+    <!-- 加入群组输入框 -->
+    <view wx:if="{{groupMode === 'join'}}" class="group-input-section slide-up">
+      <text class="input-label">输入邀请码</text>
+      <view class="input-wrap {{groupError ? 'input-error' : ''}}">
+        <input
+          class="code-input"
+          placeholder="6位邀请码，全大写字母"
+          value="{{inviteCode}}"
+          bindinput="inputInviteCode"
+          maxlength="8"
+          confirmType="done"
+          bindconfirm="confirmGroup"
+        />
+      </view>
+    </view>
+
+    <!-- 创建群组输入框 -->
+    <view wx:if="{{groupMode === 'create'}}" class="group-input-section slide-up">
+      <text class="input-label">给群组起个名字</text>
+      <view class="input-wrap {{groupError ? 'input-error' : ''}}">
+        <input
+          class="code-input"
+          placeholder="比如：XX公司觅食团"
+          value="{{companyName}}"
+          bindinput="inputCompanyName"
+          maxlength="20"
+          confirmType="done"
+          bindconfirm="confirmGroup"
+        />
+      </view>
+    </view>
+
+    <text wx:if="{{groupError}}" class="error-text">⚠️ {{groupError}}</text>
+
+    <button
+      wx:if="{{groupMode}}"
+      class="btn btn-primary action-btn slide-up {{groupLoading ? 'btn-loading' : ''}}"
+      bindtap="confirmGroup"
+      disabled="{{groupLoading}}"
+    >
+      {{groupLoading ? '处理中…' : (groupMode === 'join' ? '加入群组' : '创建群组')}}
+    </button>
+  </view>
+
+  <!-- ══ Step 2：口味偏好 ══ -->
+  <view wx:if="{{step === 2}}" class="step step-2 fade-in">
+
+    <!-- 群组成功提示 -->
+    <view wx:if="{{joinedCompany}}" class="company-badge">
+      <text class="company-badge-icon">🎉</text>
+      <view class="company-badge-info">
+        <text class="company-badge-name">{{joinedCompany.name}}</text>
+        <text class="company-badge-meta">{{joinedCompany.memberCount}}人在这里觅食</text>
+      </view>
+      <view wx:if="{{joinedCompany.inviteCode}}" class="company-badge-code">
+        <text class="invite-code-label">邀请码</text>
+        <text class="invite-code-val">{{joinedCompany.inviteCode}}</text>
+      </view>
+    </view>
+
+    <view class="onboard-header">
+      <text class="onboard-title">告诉我你喜欢吃什么</text>
+      <text class="onboard-sub">AI 推荐全靠这个，认真填</text>
+    </view>
+
+    <!-- 辣度 -->
+    <view class="pref-section">
+      <text class="pref-title">能吃辣吗？</text>
+      <view class="options-grid">
+        <view
+          wx:for="{{spicyOptions}}"
+          wx:key="value"
+          class="option-item {{preference.spicy === item.value ? 'option-active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="selectSpicy"
+        >
+          <text class="option-emoji">{{item.emoji}}</text>
+          <text class="option-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 忌口 -->
+    <view class="pref-section">
+      <text class="pref-title">有什么不吃的？</text>
+      <text class="pref-sub">没有的话跳过就好</text>
+      <view class="options-wrap">
+        <view
+          wx:for="{{forbiddenOptions}}"
+          wx:key="value"
+          class="option-tag {{forbiddenSet[item.value] ? 'option-tag-active' : ''}}"
+          hover-class="option-tag-hover"
+          hover-stay-time="100"
+          data-value="{{item.value}}"
+          bindtap="toggleForbidden"
+        >
+          <text>{{item.emoji}} {{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 品类 -->
+    <view class="pref-section">
+      <text class="pref-title">喜欢吃哪类？</text>
+      <text class="pref-sub">可以多选</text>
+      <view class="options-grid">
+        <view
+          wx:for="{{categoryOptions}}"
+          wx:key="value"
+          class="option-item {{categorySet[item.value] ? 'option-active' : ''}}"
+          hover-class="option-item-hover"
+          hover-stay-time="100"
+          data-value="{{item.value}}"
+          bindtap="toggleCategory"
+        >
+          <text class="option-emoji">{{item.emoji}}</text>
+          <text class="option-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 价位 -->
+    <view class="pref-section">
+      <text class="pref-title">一顿能花多少？</text>
+      <view class="options-grid">
+        <view
+          wx:for="{{budgetOptions}}"
+          wx:key="value"
+          class="option-item {{preference.budget === item.value ? 'option-active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="selectBudget"
+        >
+          <text class="option-emoji">{{item.emoji}}</text>
+          <text class="option-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-btn">
+      <button
+        class="btn btn-primary"
+        bindtap="finishOnboarding"
+        disabled="{{submitting}}"
+      >
+        开始觅食 🍜
+      </button>
+    </view>
+  </view>
+
+</view>

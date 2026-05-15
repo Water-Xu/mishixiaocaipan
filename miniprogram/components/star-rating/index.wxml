@@ -1,0 +1,11 @@
+<view class="star-wrap star-{{size}}">
+  <view
+    wx:for="{{stars}}"
+    wx:key="index"
+    class="star {{item.type}} {{readonly ? '' : 'clickable'}}"
+    data-index="{{item.index}}"
+    bindtap="tapStar"
+  >
+    <view class="star-char">{{item.type === 'full' ? '★' : '☆'}}</view>
+  </view>
+</view>

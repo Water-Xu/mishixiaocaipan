@@ -1,0 +1,146 @@
+<view class="page-container publish-page">
+  <!-- OCR 订单摘要卡片（从导入页跳过来时显示） -->
+  <view wx:if="{{ocrItems.length > 0}}" class="ocr-summary-card">
+    <view class="ocr-card-header">
+      <text class="ocr-card-icon">🧾</text>
+      <text class="ocr-card-title">本单菜品</text>
+      <text wx:if="{{ocrAmount}}" class="ocr-card-amount">共 ¥{{ocrAmount}}</text>
+    </view>
+    <view class="ocr-items-row">
+      <text wx:for="{{ocrItems}}" wx:key="name" class="ocr-item-chip">{{item.name}} ¥{{item.price}}</text>
+    </view>
+  </view>
+
+  <!-- 选商家 -->
+  <view class="section">
+    <text class="section-title">哪家店？</text>
+    <view class="search-wrap">
+      <input
+        class="search-input"
+        placeholder="搜索商家名字"
+        value="{{searchKeyword}}"
+        bindinput="inputSearch"
+        confirm-type="search"
+      />
+      <view class="search-icon {{searching ? 'searching' : ''}}">
+        <text>{{searching ? '⏳' : '🔍'}}</text>
+      </view>
+    </view>
+    <view wx:if="{{searchResults.length}}" class="search-dropdown">
+      <view
+        wx:for="{{searchResults}}"
+        wx:key="_id"
+        class="search-result-item"
+        data-id="{{item._id}}"
+        data-name="{{item.name}}"
+        bindtap="selectMerchant"
+      >
+        <text class="result-name">{{item.name}}</text>
+        <text class="result-meta">{{item.category}}</text>
+      </view>
+    </view>
+    <view wx:if="{{merchantName && merchantId}}" class="selected-merchant">
+      <text class="check-icon">✓</text>
+      <text class="merchant-name-text">{{merchantName}}</text>
+    </view>
+  </view>
+
+  <view class="divider"></view>
+
+  <!-- 总评分 -->
+  <view class="section">
+    <text class="section-title">这次体验怎么样？</text>
+    <view class="score-area">
+      <star-rating score="{{score}}" size="large" bind:change="setScore" />
+      <text class="score-desc">{{score === 0 ? '点星星给分' : score === 1 ? '太难吃了' : score === 2 ? '一般般' : score === 3 ? '还行吧' : score === 4 ? '挺好吃的' : '超好吃！'}}</text>
+    </view>
+  </view>
+
+  <view class="divider"></view>
+
+  <!-- 评价正文 -->
+  <view class="section">
+    <view class="section-title-row">
+      <text class="section-title">说几句 <text class="required">（至少 10 字）</text></text>
+      <view wx:if="{{draftLoading}}" class="draft-loading-badge">
+        <text class="draft-loading-dot"></text>
+        <text class="draft-loading-text">AI 起草中…</text>
+      </view>
+      <view wx:elif="{{ocrItems.length > 0 && !draftLoading && content}}" class="draft-done-badge">
+        <text>✨ 已帮你起草</text>
+      </view>
+    </view>
+    <textarea
+      class="content-input {{draftLoading ? 'content-input-loading' : ''}}"
+      placeholder="好不好吃？份量够不够？包装炸了没？送得快不快？…什么都可以说"
+      value="{{content}}"
+      bindinput="inputContent"
+      maxlength="500"
+      auto-height
+    />
+    <text class="word-count">{{content.length}}/500</text>
+  </view>
+
+  <view class="divider"></view>
+
+  <!-- 上传图片 -->
+  <view class="section">
+    <text class="section-title">晒图 <text class="optional">（最多 6 张，一图胜千言）</text></text>
+    <view class="images-picker">
+      <view
+        wx:for="{{images}}"
+        wx:key="index"
+        class="image-item"
+        data-index="{{index}}"
+        bindtap="previewImage"
+      >
+        <image class="preview-img" src="{{item.tempFilePath}}" mode="aspectFill" />
+        <view class="remove-btn" catchtap="removeImage" data-index="{{index}}">×</view>
+      </view>
+      <view wx:if="{{images.length < 6}}" class="add-image-btn" bindtap="chooseImage">
+        <text class="add-icon">+</text>
+        <text class="add-text">{{images.length}}/6</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="divider"></view>
+
+  <!-- 标签 -->
+  <view class="section">
+    <text class="section-title">贴个标签</text>
+    <tag-selector
+      tags="{{allTags}}"
+      selected="{{selectedTags}}"
+      bind:change="onTagChange"
+    />
+  </view>
+
+  <view class="divider"></view>
+
+  <!-- 心情 -->
+  <view class="section">
+    <text class="section-title">当时的状态 <text class="optional">（随便选）</text></text>
+    <view class="mood-list">
+      <view
+        wx:for="{{moodTags}}"
+        wx:key="value"
+        class="mood-item {{selectedMood === item.value ? 'mood-active' : ''}}"
+        data-value="{{item.value}}"
+        bindtap="selectMood"
+      >{{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-area">
+    <button
+      class="btn btn-primary submit-btn {{submitting ? 'btn-disabled' : ''}}"
+      bindtap="submit"
+      disabled="{{submitting}}"
+    >
+      {{submitting ? '发布中…' : '发出去 🚀'}}
+    </button>
+    <text class="submit-hint">发布前会先过一遍内容审核，通常不到 1 秒</text>
+  </view>
+</view>
