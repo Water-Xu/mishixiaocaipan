@@ -57,7 +57,27 @@
 .rank-empty { text-align: center; padding: 32rpx; font-size: 26rpx; color: #BDB0A0; }
 
 .reviewer-card { display: flex; align-items: center; gap: 20rpx; }
-.reviewer-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; background: #F5F0EB; }
+.reviewer-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; background: #F5F0EB; flex-shrink: 0; }
+.reviewer-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #FFE8D8, #FFD4C8);
+  animation: phPulse 2s ease-in-out infinite;
+}
+@keyframes phPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.03); opacity: 0.92; }
+}
+.reviewer-avatar-emoji { font-size: 44rpx; line-height: 1; }
+.stat-hint {
+  display: block;
+  font-size: 20rpx;
+  color: #BDB0A0;
+  margin-top: 6rpx;
+  text-align: center;
+  max-width: 200rpx;
+}
 .reviewer-info { flex: 1; }
 .reviewer-name { font-size: 30rpx; font-weight: 600; color: #1C1008; display: block; margin-bottom: 4rpx; }
 .reviewer-desc { font-size: 24rpx; color: #9E9185; }

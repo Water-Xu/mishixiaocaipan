@@ -11,6 +11,11 @@ exports.main = async (event, context) => {
   if (!inviteCode) return { code: 400, message: '请输入邀请码' }
 
   try {
+    const userRes = await db.collection('users').doc(openid).field({ companyId: true }).get().catch(() => null)
+    if (userRes?.data?.companyId) {
+      return { code: 409, message: '你已在团队中，请先在「我的」退出再加入' }
+    }
+
     const companyRes = await db.collection('companies')
       .where({ inviteCode: inviteCode.trim().toUpperCase() })
       .limit(1)

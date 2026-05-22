@@ -21,13 +21,21 @@ const calcPersonality = (reviews) => {
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   const openid = wxContext.OPENID
-  const { merchantId, score, subScores, content, images = [], tags = [], mood, isSecondReview = false } = event
+  const {
+    merchantId, score, subScores, content, images = [], tags = [], mood,
+    isSecondReview = false, orderItems = [], totalAmount
+  } = event
 
   if (!merchantId || !score || !content) {
     return { code: -1, message: '参数不完整' }
   }
   if (content.length < 10) {
     return { code: -1, message: '评价至少需要 10 个字' }
+  }
+
+  const userRes = await db.collection('users').doc(openid).field({ companyId: true }).get().catch(() => null)
+  if (!userRes?.data?.companyId) {
+    return { code: 403, message: '请先加入团队再发布评价' }
   }
 
   try {
@@ -64,6 +72,8 @@ exports.main = async (event, context) => {
         tags,
         mood: mood || '',
         isSecondReview,
+        orderItems: Array.isArray(orderItems) ? orderItems : [],
+        totalAmount: totalAmount != null && totalAmount !== '' ? parseFloat(totalAmount) || 0 : null,
         createdAt: db.serverDate()
       }
     })

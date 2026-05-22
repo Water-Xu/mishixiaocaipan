@@ -5,7 +5,8 @@ Page({
   data: {
     loading: true,
     ranking: null,
-    month: ''
+    month: '',
+    reviewerAvatarBroken: false
   },
 
   onLoad() {
@@ -18,7 +19,8 @@ Page({
       this.setData({
         ranking: res.ranking,
         month: formatMonth(new Date().toISOString()),
-        loading: false
+        loading: false,
+        reviewerAvatarBroken: false
       })
     } catch (e) {
       this.setData({ loading: false })
@@ -31,5 +33,9 @@ Page({
 
   shareRanking() {
     wx.showToast({ title: '长按截图分享到群里吧', icon: 'none' })
+  },
+
+  onReviewerAvatarErr() {
+    this.setData({ reviewerAvatarBroken: true })
   }
 })

@@ -12,9 +12,15 @@ Page({
 
   onLoad() {},
 
-  onShow() {
+  async onShow() {
     if (typeof this.getTabBar === 'function') {
       this.getTabBar().setData({ selected: 1 })
+    }
+    const app = getApp()
+    const step = await app.authReady
+    if (step >= 0) {
+      wx.reLaunch({ url: `/pages/onboarding/index?step=${step}` })
+      return
     }
     wx.onAccelerometerChange(res => {
       const shake = Math.abs(res.x) + Math.abs(res.y) + Math.abs(res.z)

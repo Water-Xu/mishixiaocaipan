@@ -8,7 +8,8 @@
     "pages/publish/index",
     "pages/map/index",
     "pages/merchant-detail/index",
-    "pages/ranking/index"
+    "pages/ranking/index",
+    "pages/review-detail/index"
   ],
   "tabBar": {
     "custom": true,

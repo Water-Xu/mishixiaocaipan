@@ -3,23 +3,67 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const _ = db.command
 
+/** 云函数端分页拉取，避免默认 100 条上限导致统计偏小 */
+async function fetchAllInMonth(collectionName, dateField, monthStart, monthEnd) {
+  const batch = 500
+  let skip = 0
+  const all = []
+  for (;;) {
+    let chunk = []
+    try {
+      const res = await db.collection(collectionName)
+        .where({ [dateField]: _.gte(monthStart).and(_.lte(monthEnd)) })
+        .skip(skip)
+        .limit(batch)
+        .get()
+      chunk = res.data || []
+    } catch (e) {
+      break
+    }
+    all.push(...chunk)
+    if (chunk.length < batch) break
+    skip += batch
+  }
+  return all
+}
+
 exports.main = async (event, context) => {
+  const wxContext = cloud.getWXContext()
+  const openid = wxContext.OPENID || ''
+
   try {
-    // 本月时间范围
     const now = new Date()
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
     const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59)
 
-    // 本月所有评价（集合不存在时返回空）
-    let reviews = []
-    try {
-      const reviewsRes = await db.collection('reviews')
-        .where({ createdAt: _.gte(monthStart).and(_.lte(monthEnd)) })
-        .get()
-      reviews = reviewsRes.data || []
-    } catch (e) {
-      reviews = []
+    let memberSet = null
+    let memberCount = 0
+    if (openid) {
+      const userRes = await db.collection('users').doc(openid).field({ companyId: true }).get().catch(() => null)
+      const companyId = userRes?.data?.companyId
+      if (companyId) {
+        const compRes = await db.collection('companies').doc(companyId).field({ memberIds: true }).get().catch(() => null)
+        const ids = compRes?.data?.memberIds || []
+        memberSet = new Set(ids)
+        memberCount = ids.length
+      }
     }
+
+    let reviews = await fetchAllInMonth('reviews', 'createdAt', monthStart, monthEnd)
+    if (!memberSet || !memberSet.size) {
+      return {
+        code: 0,
+        ranking: {
+          badTop: [],
+          goodTop: [],
+          topReviewer: null,
+          totalReviews: 0,
+          totalMerchants: 0,
+          avgSpend: '--'
+        }
+      }
+    }
+    reviews = reviews.filter(r => memberSet.has(r.userId))
 
     if (!reviews.length) {
       return {
@@ -35,7 +79,6 @@ exports.main = async (event, context) => {
       }
     }
 
-    // 统计每个商家的好评/差评数量和平均分
     const merchantStats = {}
     reviews.forEach(r => {
       if (!merchantStats[r.merchantId]) {
@@ -61,16 +104,21 @@ exports.main = async (event, context) => {
       }
     })
 
-    // 获取商家名称
     const merchantIds = Object.keys(merchantStats)
-    const merchantsRes = await db.collection('merchants')
-      .where({ _id: _.in(merchantIds) })
-      .field({ name: true })
-      .get()
-    const merchantNameMap = {}
-    merchantsRes.data.forEach(m => { merchantNameMap[m._id] = m.name })
+    let merchantNameMap = {}
+    if (merchantIds.length) {
+      for (let i = 0; i < merchantIds.length; i += 20) {
+        const chunk = merchantIds.slice(i, i + 20)
+        try {
+          const merchantsRes = await db.collection('merchants')
+            .where({ _id: _.in(chunk) })
+            .field({ name: true })
+            .get()
+          merchantsRes.data.forEach(m => { merchantNameMap[m._id] = m.name })
+        } catch (e) { /* skip */ }
+      }
+    }
 
-    // 踩雷 TOP 3
     const badTop = Object.values(merchantStats)
       .filter(s => s.badCount > 0)
       .sort((a, b) => b.badCount - a.badCount)
@@ -82,7 +130,6 @@ exports.main = async (event, context) => {
         topBadQuote: s.badQuotes[0] || ''
       }))
 
-    // 好评 TOP 5
     const goodTop = Object.values(merchantStats)
       .filter(s => s.goodCount > 0)
       .sort((a, b) => (b.scoreSum / b.total) - (a.scoreSum / a.total))
@@ -95,7 +142,6 @@ exports.main = async (event, context) => {
         topGoodQuote: s.goodQuotes[0] || ''
       }))
 
-    // 最敬业评论员
     const reviewerCount = {}
     reviews.forEach(r => {
       reviewerCount[r.userId] = (reviewerCount[r.userId] || 0) + 1
@@ -106,21 +152,29 @@ exports.main = async (event, context) => {
       const userRes = await db.collection('users').doc(topReviewerId).get().catch(() => null)
       if (userRes?.data) {
         topReviewer = {
-          nickName: userRes.data.nickName,
-          avatarUrl: userRes.data.avatarUrl,
+          nickName: userRes.data.nickName || '神秘同事',
+          avatarUrl: userRes.data.avatarUrl || '',
           count: reviewerCount[topReviewerId]
         }
       }
     }
 
-    // 本月消费统计（从 orders 集合）
-    const ordersRes = await db.collection('orders')
-      .where({ orderedAt: _.gte(monthStart).and(_.lte(monthEnd)) })
-      .field({ totalAmount: true, userId: true })
-      .get()
-    const totalSpend = ordersRes.data.reduce((s, o) => s + (o.totalAmount || 0), 0)
-    const uniqueUsers = new Set(ordersRes.data.map(o => o.userId)).size
-    const avgSpend = uniqueUsers > 0 ? (totalSpend / uniqueUsers).toFixed(0) : '--'
+    let orders = await fetchAllInMonth('orders', 'orderedAt', monthStart, monthEnd)
+    orders = orders.filter(o => memberSet.has(o.userId))
+
+    const totalSpend = orders.reduce((s, o) => s + (Number(o.totalAmount) || 0), 0)
+    const orderUserSet = new Set(orders.map(o => o.userId).filter(Boolean))
+
+    let avgSpend = '--'
+    if (totalSpend > 0) {
+      if (memberCount > 0) {
+        avgSpend = (totalSpend / memberCount).toFixed(0)
+      } else if (orderUserSet.size > 0) {
+        avgSpend = (totalSpend / orderUserSet.size).toFixed(0)
+      } else if (orders.length > 0) {
+        avgSpend = (totalSpend / orders.length).toFixed(0)
+      }
+    }
 
     return {
       code: 0,

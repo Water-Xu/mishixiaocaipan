@@ -222,7 +222,9 @@ Page({
         content: this.data.content,
         images: uploadedImages,
         tags: this.data.selectedTags,
-        mood: this.data.selectedMood
+        mood: this.data.selectedMood,
+        orderItems: this.data.ocrItems || [],
+        totalAmount: this.data.ocrAmount
       }, '发布中…')
       wx.showToast({ title: '发出去了！', icon: 'success' })
       setTimeout(() => wx.switchTab({ url: '/pages/square/index' }), 1200)

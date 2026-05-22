@@ -22,6 +22,90 @@
 }
 .ranking-btn:active { opacity: 0.7; }
 
+/* 团队 */
+.team-section {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  box-shadow: 0 2rpx 16rpx rgba(28,16,8,0.07);
+  margin-bottom: 24rpx;
+  animation: teamIn 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+}
+@keyframes teamIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.team-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+.team-member-count {
+  font-size: 22rpx;
+  color: #BDB0A0;
+  background: #F5F0EB;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+}
+.team-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 20rpx;
+}
+.team-icon { font-size: 32rpx; }
+.team-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1C1008;
+}
+.invite-code-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #FFF8F3, #FFF0ED);
+  border: 1rpx solid #FFD8CC;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 20rpx;
+  animation: codePulse 0.5s ease 0.15s both;
+}
+@keyframes codePulse {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+.invite-code-left { display: flex; flex-direction: column; gap: 6rpx; }
+.invite-label { font-size: 22rpx; color: #9E9185; }
+.invite-code {
+  font-size: 40rpx;
+  font-weight: 800;
+  color: #F54B2A;
+  letter-spacing: 6rpx;
+}
+.copy-btn {
+  padding: 12rpx 28rpx;
+  background: #F54B2A;
+  color: #fff;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.copy-btn:active { transform: scale(0.94); opacity: 0.85; }
+.leave-btn {
+  text-align: center;
+  padding: 16rpx;
+  font-size: 26rpx;
+  color: #9E9185;
+  border-radius: 12rpx;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.leave-btn:active {
+  background: #FFF0ED;
+  color: #F54B2A;
+}
+
 .section-gap { margin-bottom: 24rpx; }
 
 /* 偏好 */

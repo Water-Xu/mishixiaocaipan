@@ -68,7 +68,16 @@
         <text class="rank-title">最敬业评论员</text>
       </view>
       <view wx:if="{{ranking.topReviewer}}" class="reviewer-card">
-        <image class="reviewer-avatar" src="{{ranking.topReviewer.avatarUrl || ''}}" mode="aspectFill" />
+        <image
+          wx:if="{{ranking.topReviewer.avatarUrl && !reviewerAvatarBroken}}"
+          class="reviewer-avatar"
+          src="{{ranking.topReviewer.avatarUrl}}"
+          mode="aspectFill"
+          binderror="onReviewerAvatarErr"
+        />
+        <view wx:else class="reviewer-avatar reviewer-avatar-placeholder">
+          <text class="reviewer-avatar-emoji">🍱</text>
+        </view>
         <view class="reviewer-info">
           <text class="reviewer-name">{{ranking.topReviewer.nickName}}</text>
           <text class="reviewer-desc">写了 {{ranking.topReviewer.count}} 条评价，感谢贡献</text>
@@ -90,6 +99,7 @@
       <view class="stat-item">
         <text class="stat-num">¥{{ranking.avgSpend || '--'}}</text>
         <text class="stat-label">人均花费</text>
+        <text class="stat-hint">团队订单总额÷成员数</text>
       </view>
     </view>
   </view>

@@ -1,8 +1,14 @@
-<view class="review-card">
+<view class="review-card {{linkable ? '' : 'review-card-static'}}" bindtap="tapCard">
   <!-- 头部：用户信息 + 时间 -->
   <view class="card-header">
-    <image wx:if="{{review.userAvatarUrl}}" class="avatar" src="{{review.userAvatarUrl}}" mode="aspectFill" />
-    <view wx:else class="avatar avatar-default"><text class="avatar-default-emoji">😋</text></view>
+    <image
+      wx:if="{{review.userAvatarUrl && !avatarBroken}}"
+      class="avatar avatar-img"
+      src="{{review.userAvatarUrl}}"
+      mode="aspectFill"
+      binderror="onAvatarError"
+    />
+    <view wx:else class="avatar avatar-default"><text class="avatar-default-emoji">🍜</text></view>
     <view class="header-info">
       <text class="nickname">{{review.userNickName || '匿名食客'}}</text>
       <text wx:if="{{review.isSecondReview}}" class="second-badge">🔁 二刷</text>
@@ -15,16 +21,16 @@
   </view>
 
   <!-- 商家名（可选展示） -->
-  <view wx:if="{{showMerchant && review.merchantName}}" class="merchant-link" bindtap="tapMerchant">
+  <view wx:if="{{showMerchant && review.merchantName}}" class="merchant-link" catchtap="tapMerchant">
     <text class="merchant-icon">🏪</text>
     <text class="merchant-name">{{review.merchantName}}</text>
     <text class="merchant-arrow">›</text>
   </view>
 
   <!-- 评价文字 -->
-  <view class="content-wrap" bindtap="tapExpand">
-    <text class="content">{{expanded ? review.content : review.contentShort}}</text>
-    <text wx:if="{{review.contentShort !== review.content}}" class="expand-btn">
+  <view class="content-wrap" catchtap="tapExpand">
+    <text class="content">{{(!linkable || expanded) ? review.content : review.contentShort}}</text>
+    <text wx:if="{{linkable && review.contentShort !== review.content}}" class="expand-btn">
       {{expanded ? ' 收起' : ' 展开'}}
     </text>
   </view>
@@ -39,7 +45,7 @@
       width="160rpx"
       height="160rpx"
       data-index="{{index}}"
-      bindtap="previewImage"
+      catchtap="previewImage"
     />
   </view>
 
@@ -54,4 +60,43 @@
 
   <!-- 心情 -->
   <view wx:if="{{review.mood}}" class="mood-text">💬 {{review.mood}}</view>
+
+  <!-- 团队互动：评价 → 点赞 → 不对劲 -->
+  <view class="interaction-bar">
+    <view class="inter-btn inter-comment {{acting ? 'inter-disabled' : ''}}" catchtap="onTapComment">
+      <text class="inter-icon">💬</text>
+      <text class="inter-label">评价</text>
+      <text class="inter-count">{{review.commentCount || 0}}</text>
+    </view>
+    <view
+      class="inter-btn inter-like {{review.likedByMe ? 'inter-liked' : ''}} {{acting ? 'inter-disabled' : ''}}"
+      catchtap="onToggleLike"
+    >
+      <text class="inter-icon">{{review.likedByMe ? '❤️' : '🤍'}}</text>
+      <text class="inter-label">赞</text>
+      <text class="inter-count">{{review.likeCount || 0}}</text>
+    </view>
+    <view class="inter-btn inter-challenge {{acting ? 'inter-disabled' : ''}}" catchtap="onTapChallenge">
+      <text class="inter-icon">🤨</text>
+      <text class="inter-label">不对劲</text>
+      <text class="inter-count">{{review.challengeCount || 0}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{commentLines.length}}" class="interaction-thread">
+    <view wx:for="{{commentLines}}" wx:key="_id" class="thread-row">
+      <text class="thread-name">{{item.userNickName}}</text>
+      <text class="thread-time">{{item.timeLabel}}</text>
+      <text class="thread-text">{{item.content}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{challengeLines.length}}" class="challenge-thread">
+    <view wx:for="{{challengeLines}}" wx:key="_id" class="thread-row challenge-row">
+      <text class="challenge-badge">不对劲</text>
+      <text class="thread-name">{{item.userNickName}}</text>
+      <text class="thread-time">{{item.timeLabel}}</text>
+      <text class="thread-text">{{item.content}}</text>
+    </view>
+  </view>
 </view>

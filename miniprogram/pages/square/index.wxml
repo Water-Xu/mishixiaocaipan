@@ -47,6 +47,7 @@
         review="{{item}}"
         showMerchant="{{true}}"
         style="animation-delay: {{index * 0.05}}s"
+        bind:interactionupdate="onReviewInteractionUpdate"
       />
     </view>
 

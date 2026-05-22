@@ -12,6 +12,30 @@
     </view>
   </view>
 
+  <!-- 我的团队 -->
+  <view wx:if="{{company}}" class="team-section slide-up">
+    <view class="team-header">
+      <text class="section-title">我的团队</text>
+      <text class="team-member-count">{{company.memberCount || 0}} 人</text>
+    </view>
+    <view class="team-name-row">
+      <text class="team-icon">👥</text>
+      <text class="team-name">{{company.name || '未命名团队'}}</text>
+    </view>
+    <view class="invite-code-card">
+      <view class="invite-code-left">
+        <text class="invite-label">团队码</text>
+        <text class="invite-code">{{company.inviteCode}}</text>
+      </view>
+      <view class="copy-btn" bindtap="copyInviteCode">
+        <text>复制</text>
+      </view>
+    </view>
+    <view class="leave-btn" bindtap="leaveTeam">
+      <text>退出团队</text>
+    </view>
+  </view>
+
   <!-- 人格卡片 -->
   <view class="section-gap">
     <personality-card

@@ -121,8 +121,17 @@ Page({
       const app = getApp()
       if (app.globalData.userInfo) {
         app.globalData.userInfo.companyId = result.company._id
+        app.globalData.userInfo.inviteCode = result.company.inviteCode || ''
         wx.setStorageSync('userInfo', app.globalData.userInfo)
       }
+
+      if (wx.getStorageSync('hasOnboarded')) {
+        app.globalData.hasOnboarded = true
+        app.authReady = Promise.resolve(-1)
+        wx.reLaunch({ url: '/pages/square/index' })
+        return
+      }
+
       wx.pageScrollTo({ scrollTop: 0, duration: 0 })
       this.setData({ step: 2, joinedCompany: result.company, groupLoading: false })
     } catch (err) {

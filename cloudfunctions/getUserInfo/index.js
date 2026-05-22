@@ -48,7 +48,23 @@ exports.main = async (event, context) => {
       merchantName: merchantNameMap[r.merchantId] || ''
     }))
 
-    return { code: 0, userInfo, reviews: reviewList }
+    let company = null
+    if (userInfo?.companyId) {
+      try {
+        const cRes = await db.collection('companies').doc(userInfo.companyId).get()
+        const c = cRes.data
+        if (c) {
+          company = {
+            _id: c._id,
+            name: c.name || '',
+            inviteCode: c.inviteCode || userInfo.inviteCode || '',
+            memberCount: (c.memberIds || []).length
+          }
+        }
+      } catch (e) { /* skip */ }
+    }
+
+    return { code: 0, userInfo, reviews: reviewList, company }
   } catch (err) {
     console.error('getUserInfo error:', err)
     return { code: 0, userInfo: null, reviews: [] }

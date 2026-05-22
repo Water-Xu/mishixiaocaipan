@@ -58,6 +58,7 @@
         wx:key="_id"
         review="{{item}}"
         showMerchant="{{false}}"
+        bind:interactionupdate="onReviewInteractionUpdate"
       />
     </view>
     <view wx:elif="{{!loading}}" class="empty-state">

@@ -74,6 +74,15 @@ Page({
     wx.navigateTo({ url: `/pages/publish/index?merchantId=${m._id}&merchantName=${encodeURIComponent(m.name)}` })
   },
 
+  onReviewInteractionUpdate(e) {
+    const { reviewId, summary } = e.detail || {}
+    if (!reviewId || !summary) return
+    const reviews = this.data.reviews.map((r) =>
+      r._id === reviewId ? { ...r, ...summary } : r
+    )
+    this.setData({ reviews })
+  },
+
   voteBlacklist() {
     wx.showModal({
       title: '投票拉黑',

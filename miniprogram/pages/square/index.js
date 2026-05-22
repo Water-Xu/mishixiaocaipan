@@ -69,7 +69,7 @@ Page({
 
   switchSort(e) {
     const sortBy = e.currentTarget.dataset.sort
-    const labels = { latest: '最新出炉', hot: '最多人赞', bad: '差评集中营' }
+    const labels = { latest: '最新出炉', hot: '高分好评', bad: '差评集中营' }
     if (sortBy === this.data.sortBy) return
     this.setData({ sortBy, filterLabel: labels[sortBy] })
     this.loadReviews(true)
@@ -89,5 +89,14 @@ Page({
 
   goImport() {
     wx.navigateTo({ url: '/pages/import/index' })
+  },
+
+  onReviewInteractionUpdate(e) {
+    const { reviewId, summary } = e.detail || {}
+    if (!reviewId || !summary) return
+    const reviews = this.data.reviews.map((r) =>
+      r._id === reviewId ? { ...r, ...summary } : r
+    )
+    this.setData({ reviews })
   }
 })

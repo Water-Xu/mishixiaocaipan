@@ -18,7 +18,8 @@ exports.main = async (event, context) => {
       ensureCollection('users'),
       ensureCollection('companies'),
       ensureCollection('merchants'),
-      ensureCollection('reviews')
+      ensureCollection('reviews'),
+      ensureCollection('review_interactions')
     ])
 
     const userRes = await db.collection('users').doc(openid).get().catch(() => null)

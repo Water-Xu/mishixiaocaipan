@@ -5,6 +5,7 @@ const { SPICY_OPTIONS, FORBIDDEN_OPTIONS, CATEGORY_OPTIONS, BUDGET_OPTIONS } = r
 Page({
   data: {
     userInfo: null,
+    company: null,
     reviews: [],
     loading: true,
     editingPref: false,
@@ -25,9 +26,14 @@ Page({
     this.loadProfile()
   },
 
-  onShow() {
+  async onShow() {
     if (typeof this.getTabBar === 'function') {
       this.getTabBar().setData({ selected: 2 })
+    }
+    const app = getApp()
+    const step = await app.authReady
+    if (step >= 0) {
+      wx.reLaunch({ url: `/pages/onboarding/index?step=${step}` })
     }
   },
 
@@ -46,6 +52,7 @@ Page({
       }
       this.setData({
         userInfo: res.userInfo,
+        company: res.company || null,
         reviews: (res.reviews || []).map(r => ({
           ...r,
           contentShort: truncate(r.content, 60),
@@ -124,5 +131,34 @@ Page({
   goReview(e) {
     const id = e.currentTarget.dataset.id
     wx.navigateTo({ url: `/pages/merchant-detail/index?id=${id}` })
+  },
+
+  copyInviteCode() {
+    const code = this.data.company?.inviteCode
+    if (!code) return
+    wx.setClipboardData({
+      data: code,
+      success: () => wx.showToast({ title: '团队码已复制', icon: 'success' })
+    })
+  },
+
+  leaveTeam() {
+    wx.showModal({
+      title: '退出团队？',
+      content: '退出后看不到同事动态，你的评价会保留。之后可凭团队码再加入。',
+      confirmText: '退出',
+      confirmColor: '#F54B2A',
+      success: async (res) => {
+        if (!res.confirm) return
+        try {
+          await callWithLoading('leaveCompany', {}, '处理中…')
+          const app = getApp()
+          const userInfo = { ...app.globalData.userInfo, companyId: '', inviteCode: '' }
+          app.globalData.userInfo = userInfo
+          wx.setStorageSync('userInfo', userInfo)
+          wx.reLaunch({ url: '/pages/onboarding/index?step=1' })
+        } catch (e) { /* toast by call */ }
+      }
+    })
   }
 })
